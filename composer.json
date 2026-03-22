@@ -1,0 +1,23 @@
+{
+    "name": "skorlok/tacupmanager",
+    "type": "library",
+    "description": "Generate a result page for TA cups",
+    "keywords": ["maniaplanet", "trackmania"],
+    "homepage": "https://github.com/Skorlok/tacupmanager",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Skorlok",
+            "email": "contact@skorlok.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "skorlok/expansion": ">=1.2.2.5@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "ManiaLivePlugins\\skorlok\\tacupmanager\\": "."
+        }
+    }
+}
