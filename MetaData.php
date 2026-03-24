@@ -27,7 +27,7 @@ class MetaData extends \ManiaLivePlugins\eXpansion\Core\types\config\MetaData
 
         $var = new TypeString("templateFileName", "Template HTML file", $config, false, false);
         $var->setDescription("the path (relative or absolute) to the template file, used to generate the output file, it must contains the placeholder %content% where the table will be inserted");
-        $var->setDefaultValue("./taCupManager/template.html");
+        $var->setDefaultValue("./vendor/skorlok/tacupmanager/template.html");
         $this->registerVariable($var);
 
         $var = new TypeInt("buildWrTable", "Build the panel with the X first players and their time ?", $config, false, false);
