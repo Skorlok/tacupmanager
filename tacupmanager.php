@@ -1,6 +1,6 @@
 <?php
 
-namespace ManiaLivePlugins\eXpansion\tacupmanager;
+namespace ManiaLivePlugins\skorlok\tacupmanager;
 
 use ManiaLive\Event\Dispatcher;
 use ManiaLivePlugins\eXpansion\Core\DataAccess;

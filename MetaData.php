@@ -1,12 +1,13 @@
 <?php
 
-namespace ManiaLivePlugins\eXpansion\tacupmanager;
+namespace ManiaLivePlugins\skorlok\tacupmanager;
 
+use ManiaLivePlugins\eXpansion\Core\types\config\MetaData;
 use ManiaLivePlugins\eXpansion\Core\types\config\types\TypeString;
 use ManiaLivePlugins\eXpansion\Core\types\config\types\TypeInt;
 use ManiaLivePlugins\eXpansion\Core\types\config\types\Boolean;
 
-class MetaData extends \ManiaLivePlugins\eXpansion\Core\types\config\MetaData
+class MetaData extends MetaData
 {
 
     public function onBeginLoad()

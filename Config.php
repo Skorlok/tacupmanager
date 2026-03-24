@@ -1,6 +1,6 @@
 <?php
 
-namespace ManiaLivePlugins\eXpansion\tacupmanager;
+namespace ManiaLivePlugins\skorlok\tacupmanager;
 
 use ManiaLib\Utils\Singleton;
 
