@@ -345,6 +345,8 @@ class tacupmanager extends ExpPlugin
 		foreach($rankLogins as $login => $sum) {
 			$rankLogins[$login] = $sum / count($this->storage->maps);
 		}
+		
+		asort($rankLogins);
 
 		return (array($scoreFinal, $rankLogins, $playerNicknames, $posFinal, $timeLogins));
 	}
