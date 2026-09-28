@@ -22,7 +22,7 @@ class tacupmanager extends ExpPlugin
 	private $needReload = false;
 	private $needDiscordSend = false;
 	private $rateLimitDiscord = 0;
-	
+
     public function eXpOnReady()
     {
 		/** @var Config $config */
@@ -188,9 +188,7 @@ class tacupmanager extends ExpPlugin
 
 		if ($action == "getMessages") {
 			if (!$json) {
-				$this->console("Failed to get messages from Discord");
-				$this->lastDataDiscordSent = null;
-				return;
+				$this->console("Failed to get messages from Discord or there is no messages to get");
 			}
 			if (count($json) > 1) {
 				$url = 'https://discord.com/api/channels/' . $this->config->discordChannelId . '/messages/bulk-delete';
@@ -262,7 +260,7 @@ class tacupmanager extends ExpPlugin
 
 		$this->lastDataDiscordSent = array($url, array($this, "sendDiscordResults"), array("action" => $nextAction), $options);
 	}
-	
+
 	private function formatTime($t) {
 		$minutes = floor($t / 60000);
 		$t %= 60000;
@@ -272,7 +270,7 @@ class tacupmanager extends ExpPlugin
 
 		return sprintf('%02d:%02d.%03d', $minutes, $seconds, $t);
 	}
-	
+
 	private function getSqlResults() {
 		$maps = $this->storage->maps;
 
@@ -301,7 +299,7 @@ class tacupmanager extends ExpPlugin
 		$data = $this->db->execute($req)->fetchArrayOfObject();
 		return $data;
 	}
-	
+
 	private function computeScores($colorNicks = true) {
 		$scores = $this->getSqlResults();
 
@@ -345,7 +343,7 @@ class tacupmanager extends ExpPlugin
 		foreach($rankLogins as $login => $sum) {
 			$rankLogins[$login] = $sum / count($this->storage->maps);
 		}
-		
+
 		asort($rankLogins);
 
 		return (array($scoreFinal, $rankLogins, $playerNicknames, $posFinal, $timeLogins));
@@ -395,7 +393,7 @@ class tacupmanager extends ExpPlugin
 		$out .= "</table>" . PHP_EOL;
 		return $out;
 	}
-	
+
 	private function buildWrTable($scores, $nb = 3) {
 		$out = "<h3>Current World Records</h3>" . PHP_EOL;
 		$out .= "<table>" . PHP_EOL;
