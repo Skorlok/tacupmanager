@@ -6,7 +6,7 @@ use ManiaLib\Utils\Singleton;
 
 class Config extends Singleton
 {
-    public $outputFileName = "./taCupManager/index.html";
+	public $outputFileName = "./taCupManager/index.html";
 	public $templateFileName = "./vendor/skorlok/tacupmanager/template.html";
 	public $buildWrTable = -1;
 	public $buildPositionTable = true;

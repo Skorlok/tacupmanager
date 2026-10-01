@@ -23,26 +23,26 @@ class tacupmanager extends ExpPlugin
 	private $needDiscordSend = false;
 	private $rateLimitDiscord = 0;
 
-    public function eXpOnReady()
-    {
+	public function eXpOnReady()
+	{
 		/** @var Config $config */
 		$this->config = Config::getInstance();
 		$this->enableDatabase();
 		$this->enableTickerEvent();
 		$this->dataAccess = DataAccess::getInstance();
 		$this->headers = array("Authorization: Bot " . $this->config->discordToken, "Content-Type: application/json; charset=utf-8");
-        Dispatcher::register(LocalEvent::getClass(), $this);
+		Dispatcher::register(LocalEvent::getClass(), $this);
 
 		$this->needReload = true;
-    }
+	}
 
 	public function onSettingsChanged(Variable $var)
-    {
+	{
 		/** @var Config $config */
-        $this->config = Config::getInstance();
+		$this->config = Config::getInstance();
 		$this->headers = array("Authorization: Bot " . $this->config->discordToken, "Content-Type: application/json; charset=utf-8");
 		$this->configReloaded = true;
-    }
+	}
 
 	public function onTick()
 	{
@@ -71,32 +71,33 @@ class tacupmanager extends ExpPlugin
 		}
 	}
 
-    public function onRecordsLoaded($data)
-    {
-    }
+	public function onRecordsLoaded($data)
+	{
+	}
 
-    public function onUpdateRecords($data)
-    {
-    }
+	public function onUpdateRecords($data)
+	{
+	}
 
-    public function onNewRecord($data)
-    {
-    }
+	public function onNewRecord($data)
+	{
+	}
 
-    public function onRecordPlayerFinished($login)
-    {
-    }
+	public function onRecordPlayerFinished($login)
+	{
+	}
 
-    public function onRecordDeleted($removedRecord, $records)
-    {
-    }
+	public function onRecordDeleted($removedRecord, $records)
+	{
+	}
 
-    public function onPersonalBestRecord($data)
-    {
+	public function onPersonalBestRecord($data)
+	{
 		$this->needReload = true;
-    }
+	}
 
-	private function sendResults() {
+	private function sendResults()
+	{
 		// ensure file exists
 		if (!file_exists($this->config->outputFileName)) {
 			if (!is_dir(dirname($this->config->outputFileName))) {
@@ -138,25 +139,25 @@ class tacupmanager extends ExpPlugin
 		$template = str_replace("%content%", $out, $template);
 		file_put_contents($this->config->outputFileName, $template);
 
-		$this->console("Results exported to " . $this->config->outputFileName);
-
 		if ($this->config->discordToken && $this->config->discordChannelId) {
 			$this->cacheDiscordResults = $this->prettyPrintForDiscord($scores);
 			$this->needDiscordSend = true;
 		}
 	}
 
-	private function prepareDiscordResults() {
+	private function prepareDiscordResults()
+	{
 		$url = 'https://discord.com/api/channels/' . $this->config->discordChannelId . '/messages?limit=100';
 
-        $options = array(CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_TIMEOUT => 30, CURLOPT_HTTPHEADER => $this->headers);
-        $this->dataAccess->httpCurl($url, array($this, "sendDiscordResults"), array("action" => "getMessages"), $options);
+		$options = array(CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_TIMEOUT => 30, CURLOPT_HTTPHEADER => $this->headers);
+		$this->dataAccess->httpCurl($url, array($this, "sendDiscordResults"), array("action" => "getMessages"), $options);
 	}
 
-	public function sendDiscordResults($job, $jobData) {
+	public function sendDiscordResults($job, $jobData)
+	{
 		$info = $job->getCurlInfo();
-        $code = $info['http_code'];
-        $data = $job->getResponse();
+		$code = $info['http_code'];
+		$data = $job->getResponse();
 		$additionalData = $job->__additionalData;
 
 		$action = $additionalData['action'];
@@ -165,7 +166,7 @@ class tacupmanager extends ExpPlugin
 		$url = "";
 
 		if (substr($code, 0, 1) != 2) {
-            $this->console("Error on discord request, " . $action . " : " . $code);
+			$this->console("Error on discord request, " . $action . " : " . $code);
 			if ($data) {
 				$json = json_decode($data, true);
 				if ($code == 429) {
@@ -175,16 +176,16 @@ class tacupmanager extends ExpPlugin
 				$this->console(print_r($json, true));
 				return;
 			}
-        }
+		}
 
 		if ($data) {
-            $json = json_decode($data, true);
+			$json = json_decode($data, true);
 			if (!is_array($json)) {
 				$this->console("Invalid Discord response");
 				$this->lastDataDiscordSent = null;
 				return;
 			}
-        }
+		}
 
 		if ($action == "getMessages") {
 			if (!$json) {
@@ -251,17 +252,18 @@ class tacupmanager extends ExpPlugin
 			$nextAction = "sendMessage";
 		}
 
-        if ($method == "POST") {
+		if ($method == "POST") {
 			$options = array(CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_TIMEOUT => 30, CURLOPT_POST => true, CURLOPT_POSTFIELDS => json_encode($postData), CURLOPT_HTTPHEADER => $this->headers);
 		} else {
 			$options = array(CURLOPT_CONNECTTIMEOUT => 25, CURLOPT_TIMEOUT => 30, CURLOPT_CUSTOMREQUEST => $method, CURLOPT_HTTPHEADER => $this->headers);
 		}
-        $this->dataAccess->httpCurl($url, array($this, "sendDiscordResults"), array("action" => $nextAction), $options);
+		$this->dataAccess->httpCurl($url, array($this, "sendDiscordResults"), array("action" => $nextAction), $options);
 
 		$this->lastDataDiscordSent = array($url, array($this, "sendDiscordResults"), array("action" => $nextAction), $options);
 	}
 
-	private function formatTime($t) {
+	private function formatTime($t)
+	{
 		$minutes = floor($t / 60000);
 		$t %= 60000;
 
@@ -271,7 +273,8 @@ class tacupmanager extends ExpPlugin
 		return sprintf('%02d:%02d.%03d', $minutes, $seconds, $t);
 	}
 
-	private function getSqlResults() {
+	private function getSqlResults()
+	{
 		$maps = $this->storage->maps;
 
 		$uids = "";
@@ -300,7 +303,8 @@ class tacupmanager extends ExpPlugin
 		return $data;
 	}
 
-	private function computeScores($colorNicks = true) {
+	private function computeScores($colorNicks = true)
+	{
 		$scores = $this->getSqlResults();
 
 		$scoreFinal = array();
@@ -349,7 +353,8 @@ class tacupmanager extends ExpPlugin
 		return (array($scoreFinal, $rankLogins, $playerNicknames, $posFinal, $timeLogins));
 	}
 
-	private function buildHtmlTable($scores, $showTime, $replayURL = null) {
+	private function buildHtmlTable($scores, $showTime, $replayURL = null)
+	{
 		($showTime ? asort($scores[4]) : asort($scores[1]));
 
 		$out = "<h3>Current Rankings</h3>" . PHP_EOL;
@@ -394,7 +399,8 @@ class tacupmanager extends ExpPlugin
 		return $out;
 	}
 
-	private function buildWrTable($scores, $nb = 3) {
+	private function buildWrTable($scores, $nb = 3)
+	{
 		$out = "<h3>Current World Records</h3>" . PHP_EOL;
 		$out .= "<table>" . PHP_EOL;
 
@@ -459,9 +465,9 @@ class tacupmanager extends ExpPlugin
 		return $out;
 	}
 
-    public function eXpOnUnload()
-    {
-        Dispatcher::unregister(LocalEvent::getClass(), $this);
+	public function eXpOnUnload()
+	{
+		Dispatcher::unregister(LocalEvent::getClass(), $this);
 		$this->sendResults();
-    }
+	}
 }
